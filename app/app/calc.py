@@ -2,10 +2,11 @@
 Calculator functions
 """
 
+
 def add(x, y):
-    """Add x and y and return resualt"""
+    """Add x and y and return result"""
     return x + y
 
 def subtract(x, y):
-    """Subtract x and y return resualt"""
+    """Subtract x from y return result"""
     return y - x
