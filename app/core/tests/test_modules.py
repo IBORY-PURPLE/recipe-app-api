@@ -8,7 +8,6 @@ from django.contrib.auth import get_user_model
 class ModelTests(TestCase):
     """Test models"""
 
-
     def test_create_user_with_email_successful(self):
         """Testing the created user model succesfully.
         objects는 장고 모델 클래스 안에 있는 메니저객체로서
