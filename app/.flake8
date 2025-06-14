@@ -5,3 +5,8 @@ exclude =
     __pycache__,
     manage.py,
     settings.py
+ignore =
+    E261,  # inline comment 앞에 두 칸 이상 공백 없음
+    E262,  # inline comment 앞에 공백 없음
+    E265,  # block comment에 # 뒤에 공백 없음
+    E266,  # too many leading '#' for block comment
