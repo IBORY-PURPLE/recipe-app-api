@@ -12,7 +12,7 @@ from rest_framework.test import APIClient
 
 from core.models import Recipe
 
-from recipe.serializers import(
+from recipe.serializers import (
     RecipeSerializer,
     RecipeDetailSerializer,
 )
@@ -24,6 +24,7 @@ RECIPES_URL = reverse('recipe:recipe-list')
 def detail_url(recipe_id):
     """Create and return a recipe detail URL."""
     return reverse('recipe:recipe-detail', args=[recipe_id])
+
 
 # 테스트용으로 직접 db에 recipe객체 생성
 def create_recipe(user, **params):
@@ -215,4 +216,3 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
 
         self.assertTrue(Recipe.objects.filter(id=recipe.id).exists())
-
