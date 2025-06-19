@@ -66,8 +66,7 @@ class ModelTests(TestCase):
             price=Decimal('5.50'),
             description='Sample recipe description'
         )
-        # str(recipe)가 Recipe모델 하위 함수인 str()호출해서 recipe.title을 가져오는거고
-        # 두번째 인자인 recie.title은 test_create_recipe에서서 만들어진 'Sample recipe name'가져오니깐
-        # 당연히 두개가 같을 수 밖에 없는거아님?
-        # 당연히 정답.
+        # str(recipe)도 바로 위에서 생성한 recipe고 recipe.title도
+        # 바로위의 recipe여서 당연히 같을 수 밖에 없다.
+        # (just str()특별메소드 확인)
         self.assertEqual(str(recipe), recipe.title)
