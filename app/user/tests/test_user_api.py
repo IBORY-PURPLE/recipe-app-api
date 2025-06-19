@@ -35,6 +35,7 @@ class PublicUserApiTest(TestCase):
         }
         # payload에 있는 데이터가 해당 URL로 post되어지는 원리
         # URL이 브라우저 주소창도 있지만 django앱도 url로 매핑되어있는 원리.
+        # 테스트 클라이언트는 실제 브라우저가 요청을 보내듯, HTTP요청을 내부적으로 흉내를 내는 것.
         res = self.client.post(CREATE_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
