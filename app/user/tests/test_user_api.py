@@ -39,8 +39,10 @@ class PublicUserApiTest(TestCase):
         res = self.client.post(CREATE_USER_URL, payload)
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        # email이 payload에 있는 email값이 같은 user을 db에서 가져와서 유저를 생성한다는 건가?그리고 password 체크하고?
-        # 정확히 보면 이미 .post()로 유저는 생성이 되었고 유저가 생성이 잘 되었는지 get과 password확인으로 점검하는 코드이다.
+        # email이 payload에 있는 email값이 같은 user을 db에서 가져와서
+        # 유저를 생성한다는 건가?그리고 password 체크하고?
+        # 정확히 보면 이미 .post()로 유저는 생성이 되었고 유저가 생성이 잘 되었는지
+        # get과 password확인으로 점검하는 코드이다.
         user = get_user_model().objects.get(email=payload['email'])
         self.assertTrue(user.check_password(payload['password']))
         self.assertNotIn('password', res.data)
@@ -74,6 +76,7 @@ class PublicUserApiTest(TestCase):
             email=payload['email']
         ).exists()
         self.assertFalse(user_exists)
+
     def test_create_token_for_user(self):
         """Test generates token for valid credentials"""
         user_details = {
@@ -117,6 +120,8 @@ class PublicUserApiTest(TestCase):
         res = self.client.get(ME_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
 class PrivateUserApiTests(TestCase):
     """Test API requests that require authentication"""
 

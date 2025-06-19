@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 
 from core import models
 
+
 class ModelTests(TestCase):
     """Test models"""
 
@@ -66,6 +67,7 @@ class ModelTests(TestCase):
             description='Sample recipe description'
         )
         # str(recipe)가 Recipe모델 하위 함수인 str()호출해서 recipe.title을 가져오는거고
-        # 두번째 인자인 recie.title은 test_create_recipe에서서 만들어진 'Sample recipe name'가져오니깐 당연히 두개가 같을 수 밖에 없는거아님?
+        # 두번째 인자인 recie.title은 test_create_recipe에서서 만들어진 'Sample recipe name'가져오니깐
+        # 당연히 두개가 같을 수 밖에 없는거아님?
         # 당연히 정답.
-        self.assertEqual(str(recipe) , recipe.title)
+        self.assertEqual(str(recipe), recipe.title)

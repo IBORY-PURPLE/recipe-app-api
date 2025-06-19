@@ -44,6 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
+
 # DRF가장 상위 클래스 model을 상속받은 이유가 뭐야?
 # User모델은 안하던데,,
 class Recipe(models.Model):

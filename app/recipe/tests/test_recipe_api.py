@@ -17,9 +17,10 @@ from recipe.serializers import RecipeSerializer
 
 RECIPES_URL = reverse('recipe:recipe-list')
 
+
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
-    defaults ={
+    defaults = {
         'title': 'Sample recipe title',
         'time_minutes': 22,
         'price': Decimal('5.25'),
@@ -36,7 +37,7 @@ class PublicRecipeAPITests(TestCase):
     """Test unatuthenticated API requests."""
 
     def setUp(self):
-        self.client =APIClient(self)
+        self.client = APIClient(self)
 
     def test_auth_required(self):
         """Test auth is required"""
@@ -80,9 +81,10 @@ class PrivateRecipeApiTests(TestCase):
 
         res = self.client.get(RECIPES_URL)
 
-        # 지금 setUp이 self.user로 로그인이 되어있는 상태다 보니까 self.user로 설정되어있는 recipe만 get하는 거잖아 그치?
+        # 지금 setUp이 self.user로 로그인이 되어있는 상태다 보니까 self.user로
+        # 설정되어있는 recipe만 get하는 거잖아 그치?
         recipes = Recipe.objects.filter(user=self.user)
-        serializer  = RecipeSerializer(recipes, many=True)
+        serializer = RecipeSerializer(recipes, many=True)
         # 잘 get됐는지 http상태 확인코드이고
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         # res 할당된 data는 두개고 serializer.data는 로그인된 유저꺼 하나인데 true가 나오나?

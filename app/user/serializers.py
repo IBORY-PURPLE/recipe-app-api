@@ -8,6 +8,7 @@ from django.contrib.auth import (
 from django.utils.translation import gettext as _
 from rest_framework import serializers
 
+
 # serializer의 역할
 # 1. 역직렬화 : == request로 생각해서 json 객체를 파이썬 객체로 바꿔서 db에 저장.
 # 2. 직렬화 : ==response로 생각해서 db에서 클라이언트로 (파이썬 객체 -> json 객체)
@@ -17,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         # 이 필드에 설정된 필드만 시리얼라이저에게 전달되서 유효성 검사를 진행한다.
-        fields = ['email','password', 'name']
+        fields = ['email', 'password', 'name']
         # 비밀번호에 대한 추가설정을 놓는 변수
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 
@@ -30,14 +31,18 @@ class UserSerializer(serializers.ModelSerializer):
         """Update and return user."""
         password = validated_data.pop('password', None)
         # super는 부모 클래스가 상속받은 클래스의 하위 함수를 쓰기위함
-        # 여기서는 ModelSerializer안의 update()함수를 사용하기 위함 여기서 UserSerializer의 update와는 다른 update함수라는 점.
-        # 이 update는 password를 제외한 나머지 값을 업데이트하고 if문에서 password는 해쉬값으로 설정하고 저장한다.
+        # 여기서는 ModelSerializer안의 update()함수를 사용하기 위함 여기서
+        # UserSerializer의 update와는 다른 update함수라는 점.
+        # 이 update는 password를 제외한 나머지 값을 업데이트하고 if문에서
+        # password는 해쉬값으로 설정하고 저장한다.
         user = super().update(instance, validated_data)
 
         if password:
             user.set_password(password)
             user.save()
         return user
+
+
 class AuthTokenSerializer(serializers.Serializer):
     """Serializer for the user auth token"""
     email = serializers.EmailField()
