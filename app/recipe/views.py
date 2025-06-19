@@ -11,7 +11,10 @@ from recipe import serializers
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """View for manage recipe APIs."""
-    serializer_class = serializers.RecipeSerializer
+    # RecipeSerializer -> RecipeDetailSerializer 이렇게 바꾸고
+    # RecipeSerializer이 시리얼라이져를 함수로 return하는 이유는
+    # RecipeDetailSerializer가 .action으로 불러오기 어려워서야?
+    serializer_class = serializers.RecipeDetailSerializer
     queryset = Recipe.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
@@ -19,3 +22,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Retrieve recipes for authenticated user."""
         return self.queryset.filter(user=self.request.user).order_by('-id')
+
+    def get_serializer_class(self):
+        """Return the serializer class for request"""
+        if self.action == 'list':
+            return serializers.RecipeSerializer
+
+        return self.serializer_class
+
+    # serializer가 serializer_class인스턴스를 생성하는 내부적 구조와
+    # serializer.is_valid()메소드가 있는 클래스 구조와 같이 설명해줘
+    def perform_create(self, serializer):
+        """Create a new recipe"""
+        serializer.save(user=self.request.user)
+
