@@ -46,7 +46,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 # DRF가장 상위 클래스 model을 상속받은 이유가 뭐야?
-# User모델은 안하던데,,
+# User모델은 안하던데
+# migration_002
 class Recipe(models.Model):
     """Recipe objects"""
     user = models.ForeignKey(
@@ -58,6 +59,21 @@ class Recipe(models.Model):
     time_minutes = models.IntegerField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
     link = models.CharField(max_length=255, blank=True)
+    # Tag 클래스 자체를 연결한다는 뜻
+    tags = models.ManyToManyField('Tag')
 
     def __str__(self):
         return self.title
+
+
+# migration_003
+class Tag(models.Model):
+    """Tag for filtering recipes"""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return self.name

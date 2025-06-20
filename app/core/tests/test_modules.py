@@ -9,6 +9,12 @@ from django.contrib.auth import get_user_model
 from core import models
 
 
+def create_user(email='user@example.com', password='test123'):
+    """Create a return a new user."""
+    return get_user_model().objects.create_user(email, password)
+
+
+
 class ModelTests(TestCase):
     """Test models"""
 
@@ -70,3 +76,11 @@ class ModelTests(TestCase):
         # 바로위의 recipe여서 당연히 같을 수 밖에 없다.
         # (just str()특별메소드 확인)
         self.assertEqual(str(recipe), recipe.title)
+
+    # test_create_tag 함수부터 왜 create_user()를 함수화해서 하는거야? 그 전에는 test마다 user를 생성했잖아.
+    def test_create_tag(self):
+        """Test creating a tag is successful."""
+        user = create_user()
+        tag = models.Tag.objects.create(user=user, name='Tag1')
+
+        self.assertEqual(str(tag), tag.name)
