@@ -49,9 +49,9 @@ class PrivateTagsApiTests(TestCase):
         res = self.client.get(TAGS_URL)
 
         # Tag모델의 인스턴스들을 tags객체에 할당하면 tags에는 여러개의 객체가 있는 객체 리스트로 저장?
+        # tags는 queryset이다.
         tags = Tag.objects.all().order_by('-name')
         # 그래서 many라는 변수가 많은 인스턴스가 할당될 수 있다는 의미?
-        self.stdout.write(str(tags.query))
         serializer = TagSerializer(tags, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
