@@ -15,6 +15,7 @@ from recipe.serializers import TagSerializer
 
 TAGS_URL = reverse('recipe:tag-list')
 
+
 # patch, put, delete와 같은 함수들은 tag모델 중에서 개별 tag에 접근 할 수 있어야함.
 # tags/{id = 1} 이 엔드포인트에 접근하기위함.
 def detail_url(tag_id):
@@ -38,6 +39,7 @@ class PublicTagsApiTests(TestCase):
         res = self.client.get(TAGS_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class PrivateTagsApiTests(TestCase):
     """Test authenticated API requests."""

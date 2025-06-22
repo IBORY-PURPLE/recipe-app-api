@@ -14,7 +14,6 @@ def create_user(email='user@example.com', password='test123'):
     return get_user_model().objects.create_user(email, password)
 
 
-
 class ModelTests(TestCase):
     """Test models"""
 
@@ -77,7 +76,8 @@ class ModelTests(TestCase):
         # (just str()특별메소드 확인)
         self.assertEqual(str(recipe), recipe.title)
 
-    # test_create_tag 함수부터 왜 create_user()를 함수화해서 하는거야? 그 전에는 test마다 user를 생성했잖아.
+    # test_create_tag 함수부터 왜 create_user()를 함수화해서 하는거야?
+    # 그 전에는 test마다 user를 생성했잖아.
     def test_create_tag(self):
         """Test creating a tag is successful."""
         user = create_user()
