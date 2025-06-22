@@ -15,6 +15,12 @@ from recipe.serializers import TagSerializer
 
 TAGS_URL = reverse('recipe:tag-list')
 
+# patch, put, delete와 같은 함수들은 tag모델 중에서 개별 tag에 접근 할 수 있어야함.
+# tags/{id = 1} 이 엔드포인트에 접근하기위함.
+def detail_url(tag_id):
+    """Create and return a tag detail url."""
+    return reverse('recipe:tag-detail', args=[tag_id])
+
 
 def create_user(email='user@example.com', password='testpass123'):
     """Create and return a user."""
@@ -51,7 +57,7 @@ class PrivateTagsApiTests(TestCase):
         # Tag모델의 인스턴스들을 tags객체에 할당하면 tags에는 여러개의 객체가 있는 객체 리스트로 저장?
         # tags는 queryset이다.
         tags = Tag.objects.all().order_by('-name')
-        # 그래서 many라는 변수가 많은 인스턴스가 할당될 수 있다는 의미?
+        # many라는 변수는 tags라는 쿼리셋을 할당 받을 수 있게 설정하는 값
         serializer = TagSerializer(tags, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
@@ -69,3 +75,26 @@ class PrivateTagsApiTests(TestCase):
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], tag.name)
         self.assertEqual(res.data[0]['id'], tag.id)
+
+    def test_update_tag(self):
+        """Test updating a tag."""
+        tag = Tag.objects.create(user=self.user, name='After Dinner')
+
+        payload = {'name': 'Dessert'}
+        url = detail_url(tag.id)
+        res = self.client.patch(url, payload)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        tag.refresh_from_db()
+        self.assertEqual(tag.name, payload['name'])
+
+    def test_delete_tag(self):
+        """Test Deleting a tag."""
+        tag = Tag.objects.create(user=self.user, name='Breakfase')
+
+        url = detail_url(tag.id)
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
+        tags = Tag.objects.filter(user=self.user)
+        self.assertFalse(tags.exists())

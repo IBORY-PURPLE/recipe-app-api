@@ -18,6 +18,7 @@ router = DefaultRouter()
 # viewset은 url와 db모델 사이의 컨트롤러 역할을 하는 클래스라고 보자.
 router.register('recipe', views.RecipeViewSet)
 router.register('tags', views.TagViewSet)
+
 app_name = 'recipe'
 
 urlpatterns = [
