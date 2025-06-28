@@ -321,7 +321,7 @@ class PrivateRecipeApiTests(TestCase):
             'title': 'Cauliflower Tacos',
             'time_minutes': 60,
             'price': Decimal('4.30'),
-            'ingredient': [{'name': 'Cauliflower'}, {'name': 'Salt'}],
+            'ingredients': [{'name': 'Cauliflower'}, {'name': 'Salt'}],
         }
         res = self.client.post(RECIPES_URL, payload, format='json')
 
@@ -330,7 +330,7 @@ class PrivateRecipeApiTests(TestCase):
         self.assertEqual(recipes.count(), 1)
         recipe = recipes[0]
         self.assertEqual(recipe.ingredients.count(), 2)
-        for ingredient in payload['ingredient']:
+        for ingredient in payload['ingredients']:
             exists = recipe.ingredients.filter(
                 name=ingredient['name'],
                 user = self.user,
@@ -345,18 +345,21 @@ class PrivateRecipeApiTests(TestCase):
             'price': '2.55',
             'ingredients': [{'name': 'Lemon'}, {'name': 'Fish Sauce'}]
         }
+        # 이 요청에서 serializer에서 기존에 있는 ingredient는 get해오는 코드.
         res = self.client.post(RECIPES_URL, payload, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         recipes = Recipe.objects.filter(user=self.user)
         self.assertEqual(recipes.count(), 1)
         recipe = recipes[0]
-        self.assertEqual(recipe.ingredient.count(), 2)
+        self.assertEqual(recipe.ingredients.count(), 2)
+        # get해왔는지는 모르나 그냥 recipe인스턴스에 있는 확인위함
+        # get을 알려면 lemon이 1개인지 count를 해보면 됨.
         self.assertIn(ingredient, recipe.ingredients.all())
+        # for문에서 payload가 잘 db에 저장되었는지 확인하는데 굳이 assertIn을? 재차 검증
         for ingredient in payload['ingredients']:
-            exists = recipe.ingredient.filter(
+            exists = recipe.ingredients.filter(
                 name=ingredient['name'],
                 user=self.user,
             ).exists()
             self.assertTrue(exists)
-

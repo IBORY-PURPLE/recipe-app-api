@@ -29,11 +29,17 @@ class TagSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     """Serializer for recipes"""
+    # RecipeSerializer는 tags, ingredients라는 필드를 포함하고있고,
+    # 그 필드는 여러개의 TagSeriazlizer와 IngredientSerializer를 사용한다라는 뜻.
     tags = TagSerializer(many=True, required=False)
+    ingredients = IngredientSerializer(many=True, required=False)
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'time_minutes', 'price', 'link', 'tags']
+        fields = [
+            'id', 'title', 'time_minutes', 'price', 'link', 'tags',
+            'ingredients',
+        ]
         read_only_fields = ['id']
 
     def _get_or_create_tags(self, tags, recipe):
@@ -49,12 +55,25 @@ class RecipeSerializer(serializers.ModelSerializer):
             )
             recipe.tags.add(tag_obj)
 
+    def _get_or_create_ingredients(self, ingredients, recipe):
+        """Handle getting or creating ingredients as needed."""
+        auth_user = self.context['request'].user
+        for ingredient in ingredients:
+            ingredient_obj, create = Ingredient.objects.get_or_create(
+                user=auth_user,
+                **ingredient,
+            )
+            recipe.ingredients.add(ingredient_obj)
+
     def create(self, validated_data):
         """Create a recipe."""
-        # validated_data에서 tags키의 데이터를 지우고 tags 변수에 따로 할당
+        # validated_data에서 'tags'키를 tags에 할당하고 validated_data에서 삭제
         tags = validated_data.pop('tags', [])
+        ingredients = validated_data.pop('ingredients', [])
+        # 그 후에 recipe생성! 나머지 데이터를 create해야하니깐.
         recipe = Recipe.objects.create(**validated_data)
         self._get_or_create_tags(tags, recipe)
+        self._get_or_create_ingredients(ingredients, recipe)
 
         return recipe
 
