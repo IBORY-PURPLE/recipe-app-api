@@ -38,6 +38,7 @@ def image_upload_url(recipe_id):
     """Create and return an impoage upload URL."""
     return reverse('recipe:recipe-upload-image', args=[recipe_id])
 
+
 # 테스트용으로 직접 db에 recipe객체 생성
 def create_recipe(user, **params):
     """Create and return a sample recipe."""
