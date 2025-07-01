@@ -143,3 +143,8 @@ AUTH_USER_MODEL = 'core.User'
 REST_FRAMEWORK ={
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
+
+# swagger에서 이미지 파일 업로드 하기 위함.
+SPECTACULAR_SETTINGS = {
+    'COMPONENT_SPLIT_REQUEST': True,
+}

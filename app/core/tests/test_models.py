@@ -96,11 +96,15 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(ingredient), ingredient.name)
 
+    # mock객체 생성
     @patch('core.models.uuid.uuid4')
+    # @patch로 uuid4() mock객체 생성 mock_uuid에 할당
     def test_recipe_file_name_uuid(self, mock_uuid):
         """Test generating image path."""
+        # uuid값을 지정해주기 -> test위함
         uuid = 'test-uuid4'
         mock_uuid.return_value = uuid
+        # exampl.jpg -> test-uuid4.jpg로 바뀌는지 확인하기 위함.
         file_path = models.recipe_image_file_path(None, 'example.jpg')
 
         self.assertEqual(file_path, f'uploads/recipe/{uuid}.jpg')
